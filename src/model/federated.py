@@ -48,15 +48,24 @@ def _local_train(model: VAE, data: np.ndarray, epochs: int, lr: float, beta: flo
     return model
 
 
-def _fedavg(global_model: VAE, locals_: list[VAE], sizes: list[int]) -> VAE:
+def _fedavg(global_model: VAE, locals_: list[VAE], sizes: list[int],
+            noise_sigma: float = 0.0) -> VAE:
+    """Sample-weighted FedAvg. DP noise is added to the aggregated *update*,
+    scaled by the per-tensor update dispersion so that the privacy knob
+    ``noise_sigma`` stays numerically stable across rounds."""
     total = sum(sizes)
-    global_state = global_model.state_dict()
-    for key in global_state:
-        stacked = sum(
+    prev = global_model.state_dict()
+    new_state = {}
+    for key in prev:
+        agg = sum(
             (loc.state_dict()[key] * (n / total)) for loc, n in zip(locals_, sizes)
         )
-        global_state[key] = stacked
-    global_model.load_state_dict(global_state)
+        if noise_sigma > 0 and agg.dtype.is_floating_point:
+            delta = agg - prev[key]
+            scale = float(delta.std()) if delta.numel() > 1 else float(delta.abs().mean())
+            agg = agg + torch.randn_like(agg) * noise_sigma * (scale + 1e-8)
+        new_state[key] = agg
+    global_model.load_state_dict(new_state)
     return global_model
 
 
@@ -69,6 +78,7 @@ class FederatedConfig:
     dirichlet_alpha: float = 0.5
     lr: float = 1e-3
     beta: float = 1.0
+    noise_sigma: float = 0.0  # Gaussian DP noise std added to aggregated params
 
 
 def run_federated_vae(
@@ -93,7 +103,7 @@ def run_federated_vae(
             _local_train(local, x[p], cfg.local_epochs, cfg.lr, cfg.beta)
             locals_.append(local)
             sizes.append(len(p))
-        global_model = _fedavg(global_model, locals_, sizes)
+        global_model = _fedavg(global_model, locals_, sizes, cfg.noise_sigma)
     return global_model
 
 
