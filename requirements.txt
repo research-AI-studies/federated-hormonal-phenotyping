@@ -1,0 +1,42 @@
+# Core scientific stack
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.13.1
+scikit-learn==1.5.1
+
+# Deep learning (federated VAE)
+torch==2.3.1
+
+# Federated learning orchestration
+flwr==1.9.0
+
+# Differential privacy accounting
+opacus==1.5.2
+
+# Self-organising map
+minisom==2.3.3
+
+# Imputation
+statsmodels==0.14.2
+
+# Dimensionality reduction / clustering support
+umap-learn==0.5.6
+hdbscan==0.8.37
+
+# Interpretability
+shap==0.45.1
+
+# Cohort description tables
+tableone==0.8.0
+
+# Plotting (writes to git-ignored outputs/)
+matplotlib==3.9.1
+seaborn==0.13.2
+
+# Config and IO
+pyyaml==6.0.1
+openpyxl==3.1.5
+
+# Testing / quality
+pytest==8.2.2
+ruff==0.5.5

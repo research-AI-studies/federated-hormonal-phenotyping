@@ -1,0 +1,16 @@
+variable,source_field,type,unit,allowed_values,role,notes
+patient_id,record_id,string,,,identifier,De-identified surrogate key only
+age,age_at_baseline,numeric,years,18-99,feature,Continuous
+bmi,bmi,numeric,kg/m2,12-60,feature,Continuous
+age_menarche,menarche_age,numeric,years,8-20,feature,Continuous
+parity,num_pregnancies,integer,count,0-15,feature,Count of pregnancies
+nulliparous,nulliparous,categorical,,{0,1},feature,Derived: parity==0
+menopausal_status,menopause,categorical,,{premenopausal,perimenopausal,postmenopausal},feature,
+education,education_level,categorical,,{primary,secondary,tertiary},feature,
+marital_status,partnership,categorical,,{single,partnered,married,divorced,widowed},feature,
+contraceptive_use,contraceptive,categorical,,{never,former,current},feature,Hormonal contraceptive history
+alcohol,alcohol_use,categorical,,{never,occasional,regular},feature,
+smoking,smoking_status,categorical,,{never,former,current},feature,
+bust_size,bust_cm,numeric,cm,60-150,feature,Continuous
+cup_size,cup,categorical,,{A,B,C,D,E,F},feature,
+diagnosis,diagnosis_group,categorical,,{benign,DCIS,invasive},target_hint,Used only for figure colouring; never a training label
