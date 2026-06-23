@@ -6,13 +6,6 @@ variational autoencoder (VAE)** for representation learning with a
 **federated self-organising map (F-SOM)** for topology-preserving cluster
 discovery, under **differential-privacy** guarantees.
 
-> **Data policy.** This repository publishes **source code only**. No raw,
-> input, processed, or output data, and no generated artefacts (figures,
-> charts, tables, model weights, logs) are tracked or pushed to any public
-> remote. See [`.gitignore`](.gitignore) and [`data/README.md`](data/README.md).
-> The pipeline can be exercised end-to-end on a synthetic surrogate cohort
-> produced locally by `data/synthetic/generate_synthetic.py`.
-
 ---
 
 ## Pipeline overview
