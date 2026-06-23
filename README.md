@@ -79,8 +79,3 @@ repository tree (or set `data.path` in the config). Such files are excluded by
 ## Licence
 
 Released under the MIT Licence. See [`LICENSE`](LICENSE).
-
-## Citation
-
-If you use this code, please cite the accompanying manuscript (see
-[`CITATION.cff`](CITATION.cff)).
