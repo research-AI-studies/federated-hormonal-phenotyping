@@ -63,8 +63,9 @@ def main():
     diag = sd.diagnosis.to_numpy()
     R["diagnosis_counts"] = {int(k): int((diag == k).sum()) for k in [1, 2, 3, 4]}
 
-    # Missingness on the ten inputs (pre-imputation), within analytic cohort.
-    R["missingness"] = {c: round(float(sd.inputs[c].isna().mean() * 100), 1)
+    # Full-cohort missingness on the ten inputs (genuine missing in the released
+    # registry, before any exclusion or winsorisation), as reported in the text.
+    R["missingness"] = {c: round(float(sd.raw[c].isna().mean() * 100), 1)
                         for c in CLUSTER_INPUTS}
 
     # Impute + encode.
