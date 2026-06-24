@@ -86,6 +86,9 @@ Thumbs.db
 .idea/
 .vscode/
 
+# --- Private, offline-only scripts (never publish) ---------------------------
+scripts/make_figures.py
+
 # ============================================================================
 # Explicit allow-list re-includes: small, non-sensitive code-adjacent files
 # that must remain tracked despite broad patterns above.
