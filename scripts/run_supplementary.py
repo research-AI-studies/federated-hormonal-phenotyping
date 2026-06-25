@@ -201,6 +201,59 @@ def glmm_contrasts(sd, labels, seed):
     return out
 
 
+def heckman(sd, imp, labels, scales=("brsee", "brhl"), ref=1):
+    """Heckman two-step selection adjustment for the conditional EORTC items.
+
+    Selection (probit): item observed ~ age + bmi + menopause + diagnosis + phenotype.
+    Outcome (OLS on observed): score ~ phenotype + age + inverse-Mills ratio. The IMR
+    coefficient tests for selection on unobservables; comparing naive and adjusted
+    phenotype coefficients shows whether the effects survive selection correction.
+    """
+    import statsmodels.api as sm
+    from scipy.stats import norm
+
+    diag = sd.diagnosis.to_numpy()
+    cat = [ref] + [c for c in sorted(set(int(x) for x in labels)) if c != ref]
+    out = {}
+    for s in scales:
+        y = sd.outcomes[s].reset_index(drop=True).to_numpy().astype(float)
+        obs = (~pd.isna(y)).astype(int)
+        df = pd.DataFrame({"y": y, "obs": obs,
+                           "age": imp["age"].to_numpy(), "bmi": imp["bmi"].to_numpy(),
+                           "meno": imp["menopause_yn"].to_numpy(),
+                           "diag": diag, "cl": pd.Categorical(labels.astype(int), categories=cat)})
+        diag_d = pd.get_dummies(df["diag"], prefix="diag", drop_first=True).astype(float)
+        cl_d = pd.get_dummies(df["cl"], prefix="cl", drop_first=True).astype(float)
+        try:
+            zsel = sm.add_constant(pd.concat([df[["age", "bmi", "meno"]], diag_d, cl_d], axis=1))
+            pr = sm.Probit(df["obs"], zsel).fit(disp=False, maxiter=200)
+            xb = pr.predict(zsel, linear=True).to_numpy()
+            df["imr"] = norm.pdf(xb) / np.clip(norm.cdf(xb), 1e-6, None)
+            m = df["obs"] == 1
+            base = pd.concat([cl_d, df[["age"]]], axis=1)
+            adj = sm.OLS(df.loc[m, "y"], sm.add_constant(pd.concat([base, df[["imr"]]], axis=1))[m]).fit()
+            nai = sm.OLS(df.loc[m, "y"], sm.add_constant(base)[m]).fit()
+            label_of = {0: "C3", 2: "C2", 3: "C4", 1: "C1"}
+            contrasts = {}
+            for dk in [c for c in cat if c != ref]:
+                col = f"cl_{dk}"
+                if col in adj.params.index:
+                    contrasts[label_of.get(dk, str(dk))] = {
+                        "naive": round(float(nai.params[col]), 2),
+                        "adjusted": round(float(adj.params[col]), 2),
+                        "adjusted_p": round(float(adj.pvalues[col]), 3),
+                    }
+            out[s] = {
+                "pct_observed": round(float(obs.mean() * 100), 1),
+                "lambda_imr": round(float(adj.params.get("imr", float("nan"))), 2),
+                "lambda_p": round(float(adj.pvalues.get("imr", float("nan"))), 3),
+                "contrasts": contrasts,
+            }
+        except Exception as e:                       # noqa: BLE001
+            out[s] = {"error": str(e)[:140]}
+    return out
+
+
 def latent_grid(X, k, seed, dims=(4, 8, 16, 32)):
     import torch
     out = {}
@@ -262,6 +315,9 @@ def main():
 
     print("  GLMM contrasts...")
     R["glmm"] = glmm_contrasts(sd, labels, seed)
+
+    print("  Heckman selection adjustment (brsee, brhl)...")
+    R["heckman"] = heckman(sd, imp, labels)
 
     print("  SOM quantisation error...")
     som = SOM(grid=(8, 8), input_dim=Z.shape[1], seed=seed).train(Z)
