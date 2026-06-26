@@ -3,7 +3,7 @@ seed: 42
 
 data:
   # Point this at a private local file when running on real data.
-  path: data/synthetic/cohort.csv
+  path: data/example/cohort.csv
   id_col: patient_id
   target_hint: diagnosis        # used only to colour figures, never as a label
   drop_cols: []

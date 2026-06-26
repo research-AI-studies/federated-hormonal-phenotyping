@@ -1,6 +1,6 @@
-"""Generate a synthetic surrogate cohort.
+"""Generate an example cohort.
 
-The synthetic data reproduces the schema in ``data/codebook_crosswalk.csv`` and
+The example data reproduces the schema in ``data/codebook_crosswalk.csv`` and
 plausible marginal distributions so the pipeline can be exercised end-to-end
 without any real patient records. Output is written to a git-ignored path.
 """
@@ -79,11 +79,11 @@ def generate(n: int, seed: int = 42) -> pd.DataFrame:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Generate a synthetic cohort.")
+    parser = argparse.ArgumentParser(description="Generate an example cohort.")
     parser.add_argument("--n", type=int, default=600, help="Number of records.")
     parser.add_argument("--seed", type=int, default=42, help="Random seed.")
     parser.add_argument(
-        "--out", type=str, default="data/synthetic/cohort.csv",
+        "--out", type=str, default="data/example/cohort.csv",
         help="Output CSV path (git-ignored).",
     )
     args = parser.parse_args()
@@ -92,7 +92,7 @@ def main() -> None:
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(out, index=False)
-    print(f"Wrote {len(df)} synthetic records to {out}")
+    print(f"Wrote {len(df)} example records to {out}")
 
 
 if __name__ == "__main__":

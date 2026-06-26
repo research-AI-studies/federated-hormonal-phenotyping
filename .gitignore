@@ -11,8 +11,8 @@ data/input/
 data/interim/
 data/processed/
 data/external/
-data/synthetic/*.csv
-data/synthetic/*.parquet
+data/example/*.csv
+data/example/*.parquet
 *.xlsx
 *.xls
 *.csv

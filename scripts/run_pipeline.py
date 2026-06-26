@@ -7,7 +7,7 @@ phenotype attributions, and writes figures/tables to the git-ignored
 
 Usage:
     python scripts/run_pipeline.py --config config/default.yaml \
-        --data data/synthetic/cohort.csv
+        --data data/example/cohort.csv
 """
 from __future__ import annotations
 

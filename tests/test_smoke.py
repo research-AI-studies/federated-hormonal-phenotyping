@@ -1,4 +1,4 @@
-"""Smoke tests exercising the pipeline on a small synthetic cohort."""
+"""Smoke tests exercising the pipeline on a small example cohort."""
 from __future__ import annotations
 
 import sys
@@ -8,7 +8,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from data.synthetic.generate_synthetic import generate  # noqa: E402
+from data.example.generate_example import generate  # noqa: E402
 from src.preprocessing import drop_high_missing, encode_features, mice_impute, winsorize  # noqa: E402
 from src.model import encode_latent, train_vae  # noqa: E402
 from src.model.som import SOM  # noqa: E402

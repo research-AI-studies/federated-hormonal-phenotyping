@@ -17,4 +17,4 @@ COPY . .
 
 # Data and outputs are bind-mounted at runtime; nothing sensitive is baked in.
 ENTRYPOINT ["python", "scripts/run_pipeline.py"]
-CMD ["--config", "config/default.yaml", "--data", "data/synthetic/cohort.csv"]
+CMD ["--config", "config/default.yaml", "--data", "data/example/cohort.csv"]

@@ -35,14 +35,14 @@ raw cohort (local, private)
 | Path | Purpose |
 |------|---------|
 | `config/` | YAML run configuration (paths, hyper-parameters, privacy budget) |
-| `data/` | Schema crosswalk + synthetic-data generator (no real data tracked) |
+| `data/` | Schema crosswalk + example-data generator (no real data tracked) |
 | `src/preprocessing/` | Loading, cleaning, imputation, encoding |
 | `src/model/` | VAE, SOM, federated orchestration, DP accountant |
 | `src/validation/` | Internal/external cluster-quality and stability metrics |
 | `src/interpretability/` | SHAP-based phenotype attribution |
 | `src/figures/` | Plotting utilities (write to git-ignored `outputs/`) |
 | `scripts/` | End-to-end pipeline runner and Table 1 builder |
-| `tests/` | Smoke tests on synthetic data |
+| `tests/` | Smoke tests on example data |
 | `notebooks/` | Exploratory notebooks (stripped of outputs before commit) |
 
 ## Quick start
@@ -52,11 +52,11 @@ raw cohort (local, private)
 python -m venv .venv && . .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 
-# 2. Generate a synthetic surrogate cohort (writes to git-ignored data/synthetic/)
-python data/synthetic/generate_synthetic.py --n 600 --out data/synthetic/cohort.csv
+# 2. Generate an example cohort (writes to git-ignored data/example/)
+python data/example/generate_example.py --n 600 --out data/example/cohort.csv
 
-# 3. Run the full pipeline on the synthetic cohort
-python scripts/run_pipeline.py --config config/default.yaml --data data/synthetic/cohort.csv
+# 3. Run the full pipeline on the example cohort
+python scripts/run_pipeline.py --config config/default.yaml --data data/example/cohort.csv
 ```
 
 To run on a private cohort, point `--data` at a local file outside the

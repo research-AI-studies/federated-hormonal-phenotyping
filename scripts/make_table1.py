@@ -17,7 +17,7 @@ from src.preprocessing import load_cohort  # noqa: E402
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Generate a baseline Table 1.")
-    ap.add_argument("--data", default="data/synthetic/cohort.csv")
+    ap.add_argument("--data", default="data/example/cohort.csv")
     ap.add_argument("--group", default="diagnosis", help="Stratifying column.")
     ap.add_argument("--out", default="outputs/tables/table1.csv")
     args = ap.parse_args()

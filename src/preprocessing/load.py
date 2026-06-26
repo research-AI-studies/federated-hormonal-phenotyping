@@ -1,7 +1,7 @@
 """Cohort loading utilities.
 
 Supports CSV and Excel. The loader is format-agnostic about provenance: the
-same code path serves the synthetic surrogate and a private local cohort.
+same code path serves the example cohort and a private local cohort.
 """
 from __future__ import annotations
 
@@ -15,8 +15,8 @@ def load_cohort(path: str | Path, id_col: str | None = None) -> pd.DataFrame:
     path = Path(path)
     if not path.exists():
         raise FileNotFoundError(
-            f"Cohort file not found: {path}. Generate a synthetic cohort with "
-            f"data/synthetic/generate_synthetic.py or point --data at a local file."
+            f"Cohort file not found: {path}. Generate an example cohort with "
+            f"data/example/generate_example.py or point --data at a local file."
         )
 
     if path.suffix.lower() in {".xlsx", ".xls"}:

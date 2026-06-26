@@ -12,8 +12,8 @@ public remote. Only source code and non-sensitive schema metadata are public.
 | Item | Tracked? | Notes |
 |------|----------|-------|
 | `codebook_crosswalk.csv` | yes | Variable schema only (names, types, allowed values). Contains **no** patient records. |
-| `synthetic/generate_synthetic.py` | yes | Generates a surrogate cohort that reproduces the schema and marginal distributions used by the pipeline. |
-| `synthetic/cohort.csv` | **no** | Generated locally on demand; git-ignored. |
+| `example/generate_example.py` | yes | Generates an example cohort that reproduces the schema and marginal distributions used by the pipeline. |
+| `example/cohort.csv` | **no** | Generated locally on demand; git-ignored. |
 | `raw/`, `input/`, `interim/`, `processed/`, `external/` | **no** | Reserved for private local data; git-ignored. |
 
 ## Running on private data
